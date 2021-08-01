@@ -1,43 +1,57 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import logo from './logo.svg'
 import './App.css'
+import firebase from 'firebase'
+import app from 'firebase/app'
+import 'firebase/firestore'
+
+
+var firebaseConfig = {
+  apiKey: "AIzaSyCTvOjkdho2r7l4m-GVPYiSrEuazQeYu2s",
+  authDomain: "chat-fire-test-756d8.firebaseapp.com",
+  projectId: "chat-fire-test-756d8",
+  storageBucket: "chat-fire-test-756d8.appspot.com",
+  messagingSenderId: "945038291938",
+  appId: "1:945038291938:web:b4c7699615c23068967fbb",
+  measurementId: "G-WWFW3PM397"
+}
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig)
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  var db = firebase.firestore()
+  var ref = db.collection("shareData")
+
+  const [data, setData] = useState("")
+  const [message, setMessage] = useState("")
+  const [disable, setDisable] = useState(false) 
+
+  const shareData = async () => {
+    setDisable(true)
+    if (data) {
+      var dataJson = {
+        "data": data,
+        "createdAt": Date.now()
+      }
+
+      var addedref = await ref.add(dataJson)
+      setMessage(`shared data successfully with document id : ${addedref.id} at ${new Date(dataJson.createdAt).toUTCString()}`)
+    }
+    setDisable(false)
+  }
+
+  ref.onSnapshot((snapshot) => {
+    snapshot.docs.forEach((value)=>{
+      console.log(value.data())
+    })
+  })
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
+      <textarea rows={20} onChange={(e) => { setData(e.target.value) }} placeholder={"Enter You Text Here"}></textarea>
+      <button onClick={shareData}>{!disable ? "Share" : "Sending In Progress..."}</button>
+      <p>{message}</p>
     </div>
   )
 }
