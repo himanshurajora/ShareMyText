@@ -26,7 +26,7 @@ function App() {
   const [data, setData] = useState("")
   const [message, setMessage] = useState("")
   const [disable, setDisable] = useState(false) 
-
+  const [r, setR] = useState("")
   const shareData = async () => {
     setDisable(true)
     if (data) {
@@ -35,23 +35,23 @@ function App() {
         "createdAt": Date.now()
       }
 
-      var addedref = await ref.add(dataJson)
-      setMessage(`shared data successfully with document id : ${addedref.id} at ${new Date(dataJson.createdAt).toUTCString()}`)
+      await ref.doc("shared").set(dataJson)
+      setMessage(`shared data successfully at ${new Date(dataJson.createdAt).toUTCString()}`)
     }
     setDisable(false)
   }
 
-  ref.onSnapshot((snapshot) => {
-    snapshot.docs.forEach((value)=>{
-      console.log(value.data())
-    })
+  ref.doc("shared").onSnapshot((snapshot)=>{
+    console.log(snapshot.data())
+    setR(snapshot.data()!.data)
   })
 
   return (
     <div className="App">
       <textarea rows={20} onChange={(e) => { setData(e.target.value) }} placeholder={"Enter You Text Here"}></textarea>
-      <button onClick={shareData}>{!disable ? "Share" : "Sending In Progress..."}</button>
-      <p>{message}</p>
+      <p> <span> <button onClick={shareData}>{!disable ? "Share" : "Sending In Progress..."}</button></span> {message}</p>
+      <p>Recieved data here:</p>
+      <p id={"r"}>{r}</p>
     </div>
   )
 }
