@@ -6,5 +6,8 @@ so i created this app for my personal use and i am pretty much happy with it..
 using this i also learned a bit of firebase and firestore.. 
 so it helped me in both learning and problem solving indeed my own
 
+### live preview 
+<a href="https://somewebshit.web.app">Click here to see the hosted preview</a>
+
 see ya
 made by Vedik Dev Himanshu Jangid
