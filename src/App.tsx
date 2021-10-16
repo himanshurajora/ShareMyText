@@ -22,7 +22,6 @@ function App() {
 
   var db = firebase.firestore()
   var ref = db.collection("shareData")
-
   const [data, setData] = useState("")
   const [message, setMessage] = useState("")
   const [disable, setDisable] = useState(false) 
