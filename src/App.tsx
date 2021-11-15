@@ -78,6 +78,7 @@ function App() {
     }
     return (
       <div className="App">
+        <h2>Don't worry it's just firebase.. not hard to make anything like it.. why worry so much</h2>
         <textarea rows={20} onChange={(e) => { setData(e.target.value) }} placeholder={"Enter You Text Here"}></textarea>
         <p> <input type="text" placeholder='Encryption Code' onChange={(e)=>{setencypcode(e.target.value)}} /> <span> <button onClick={em}>{!disable ? "Share" : "Sending In Progress..."}</button></span> {message}</p>
         <p>Recieved data here:</p>
