@@ -73,10 +73,13 @@ function App() {
       setR(snapshot.data()!.data)
     })
 
+    const em = () => {
+    
+    }
     return (
       <div className="App">
         <textarea rows={20} onChange={(e) => { setData(e.target.value) }} placeholder={"Enter You Text Here"}></textarea>
-        <p> <input type="text" placeholder='Encryption Code' onChange={(e)=>{setencypcode(e.target.value)}} /> <span> <button onClick={shareData}>{!disable ? "Share" : "Sending In Progress..."}</button></span> {message}</p>
+        <p> <input type="text" placeholder='Encryption Code' onChange={(e)=>{setencypcode(e.target.value)}} /> <span> <button onClick={em}>{!disable ? "Share" : "Sending In Progress..."}</button></span> {message}</p>
         <p>Recieved data here:</p>
         <pre id={"r"}>{r}</pre>
         <pre id={"decoded"}>{decoded}</pre>
