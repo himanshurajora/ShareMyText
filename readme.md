@@ -9,5 +9,18 @@ so it helped me in both learning and problem solving indeed my own
 ### live preview 
 <a href="https://somewebshit.web.app">Click here to see the hosted preview</a>
 
+**Features**
+- Share any text via internet 
+- No Authentication required
+- Free
+- Encryption Feature for private data
+
+**New Features**
+- Custom Rooms for preventing data rewrite
+- Custom rooms with encryption
+
+Thank You For using our software 
+
 see ya
-made by Vedik Dev Himanshu Jangid
+Made by Vedik Dev - Himanshu Jangid
+VCF always welcomes you
