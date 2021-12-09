@@ -33,6 +33,7 @@ function App() {
   const [encypcode, setencypcode] = useState("")
   const [decryptcode, setdecryptcode] = useState("")
   const [decoded, setdecoded] = useState("")
+  const [room, setroom] = useState("shared");
   const [r, setR] = useState("")
   const shareData = async () => {
     setDisable(true)
@@ -50,7 +51,7 @@ function App() {
         }
       }
 
-        await ref.doc("shared").set(dataJson)
+        await ref.doc(room ? room : "shared").set(dataJson)
         setMessage(`shared data successfully at ${new Date(dataJson.createdAt).toUTCString()}`)
       }
       setDisable(false)
@@ -69,8 +70,8 @@ function App() {
      }
 
 
-    ref.doc("shared").onSnapshot((snapshot) => {
-      setR(snapshot.data()!.data)
+    ref.doc(room ? room : "shared").onSnapshot((snapshot) => {
+      setR(snapshot?.data()?.data)
     })
 
     const em = () => {
@@ -78,9 +79,9 @@ function App() {
     }
     return (
       <div className="App">
-        <h2>Don't worry it's just firebase.. not hard to make anything like it.. why worry so much</h2>
+        {/* <h2>Don't worry it's just firebase.. not hard to make anything like it.. why worry so much</h2> */}
         <textarea rows={20} onChange={(e) => { setData(e.target.value) }} placeholder={"Enter You Text Here"}></textarea>
-        <p> <input type="text" placeholder='Encryption Code' onChange={(e)=>{setencypcode(e.target.value)}} /> <span> <button onClick={em}>{!disable ? "Share" : "Sending In Progress..."}</button></span> {message}</p>
+        <p> <input type="text" placeholder='Encryption Code (Optional)' onChange={(e)=>{setencypcode(e.target.value)}} /> <input type="text" placeholder='Room Id (Optional)' value={room} onChange={(e)=>{setroom(e.target.value)}}/> <span> <button onClick={shareData}>{!disable ? "Share" : "Sending In Progress..."}</button></span> {message}</p>
         <p>Recieved data here:</p>
         <pre id={"r"}>{r}</pre>
         <pre id={"decoded"}>{decoded}</pre>
