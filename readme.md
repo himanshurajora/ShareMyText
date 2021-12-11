@@ -27,5 +27,5 @@ Made by Vedik Dev - Himanshu Jangid
 VCF always welcomes you
 
 **Contributors**
---Himanshu Jangid
---Harsh Agarwal
+- Himanshu Jangid
+- Harsh Agarwal
