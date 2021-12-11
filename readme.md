@@ -25,3 +25,7 @@ Thank You For using our software
 see ya
 Made by Vedik Dev - Himanshu Jangid
 VCF always welcomes you
+
+**Contributors**
+--Himanshu Jangid
+--Harsh Agarwal
