@@ -32,7 +32,7 @@ function App() {
   const [encypcode, setencypcode] = useState("")
   const [decryptcode, setdecryptcode] = useState("")
   const [decoded, setdecoded] = useState("")
-  const [room, setroom] = useState("shared");
+  const [room, setroom] = useState("");
   const [r, setR] = useState("")
 
   const shareData = async () => {
@@ -79,6 +79,7 @@ function App() {
   }
   return (
     <div className="App">
+      <span id="forkongithub"><a href="https://github.com/himanshurajora/ShareMyText">Fork me on GitHub</a></span>
       <h4 id='wrapper'>Share Your Text With Custom Encryption</h4>
       <code>
         <textarea className='input-text' rows={20} onChange={(e) => { setData(e.target.value) }} placeholder={"Enter You Text Here"}></textarea>
