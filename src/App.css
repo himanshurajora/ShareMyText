@@ -1,20 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Paytone+One&display=swap');
 .App{
   padding: 20px;
 }
+*{
+  padding: 0;
+  margin: 0;
+}
 textarea{
   width: 100%;
+  color: rgb(0, 255, 13);
+  background-color: rgb(49, 49, 49);
+  border: none;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+textarea:focus{
+  outline: 4px solid rgba(255, 255, 255, 0.37);
+}
+#wrapper{
+  font-family: 'Paytone One', sans-serif;
+  color: rgb(0, 255, 13);
+  font-size: x-large;
+  padding: 20px 10px;
+}
+
+.text-small{
+  font-size: medium;
+  color: rgb(0, 255, 13);
+  padding: 10px;
 }
 #r{
-  background-color: rgb(230, 230, 230);
+  background-color: rgb(49, 49, 49);
   height: 20%;
   width: 100%;
   padding: 20px;
+  border: none;
+  border-radius: 10px;
   overflow-x: scroll;
+  margin: 10px 0px;
+  color: rgb(0, 255, 13);
 }
 
 #decoded{
-  background-color: rgb(175, 255, 182);
+  background-color: rgb(0, 173, 52);
   height: 20%;
   width: 100%;
   padding: 20px;
+  border: none;
+  border-radius: 10px;
+  overflow-x: scroll;
+  margin: 10px 0px;
+  color: rgb(255, 255, 255);
+}
+
+body{
+  background-color: #141414;
+  font-family: 'Paytone One', sans-serif;
+}
+
+
+.inputs{
+  background-color: rgb(49, 49, 49);
+  color: rgb(0, 255, 13);
+  font-size: large;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+}
+
+.inputs:focus{
+  outline: 1px solid rgba(255, 255, 255, 0.37);
+}
+
+.btn{
+  background: rgb(30, 30, 30);
+  color: grey;
+  font-size: large;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+}
+
+.btn:hover{
+  background: rgb(30, 30, 30);
+  color: rgb(0, 255, 13);
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(0, 104, 31);
+  border-radius: 10px;
 }

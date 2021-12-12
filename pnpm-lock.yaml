@@ -12,6 +12,7 @@ specifiers:
   jsonwebtoken: ^8.5.1
   react: ^17.0.2
   react-dom: ^17.0.2
+  typescript: ^4.5.3
   vite: ^2.6.7
 
 dependencies:
@@ -25,6 +26,7 @@ dependencies:
   jsonwebtoken: 8.5.1
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
+  typescript: 4.5.3
   vite: 2.6.7
 
 devDependencies:
@@ -3497,6 +3499,12 @@ packages:
     dependencies:
       is-typedarray: 1.0.0
     dev: true
+
+  /typescript/4.5.3:
+    resolution: {integrity: sha512-eVYaEHALSt+s9LbvgEv4Ef+Tdq7hBiIZgii12xXJnukryt3pMgJf6aKhoCZ3FWQsu6sydEnkg11fYXLzhLBjeQ==}
+    engines: {node: '>=4.2.0'}
+    hasBin: true
+    dev: false
 
   /universalify/0.1.2:
     resolution: {integrity: sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==}

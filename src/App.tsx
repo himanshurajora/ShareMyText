@@ -5,7 +5,7 @@ import firebase from 'firebase'
 import app from 'firebase/app'
 import 'firebase/firestore'
 import * as Crypto from 'crypto-js'
-
+// import hljs, {HLJSApi} from 'highlight.js'
 var firebaseConfig = {
   apiKey: "AIzaSyCTvOjkdho2r7l4m-GVPYiSrEuazQeYu2s",
   authDomain: "chat-fire-test-756d8.firebaseapp.com",
@@ -16,15 +16,14 @@ var firebaseConfig = {
   measurementId: "G-WWFW3PM397"
 }
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig) 
+firebase.initializeApp(firebaseConfig)
 
-interface Data{
+interface Data {
   data: string,
   createdAt: number
 }
 
 function App() {
-  
   var db = firebase.firestore()
   var ref = db.collection("shareData")
   const [data, setData] = useState("")
@@ -35,12 +34,13 @@ function App() {
   const [decoded, setdecoded] = useState("")
   const [room, setroom] = useState("shared");
   const [r, setR] = useState("")
+
   const shareData = async () => {
     setDisable(true)
     if (data) {
-      var dataJson = {"data" : "some data", "createdAt": 1337}
+      var dataJson = { "data": "some data", "createdAt": 1337 }
       if (encypcode) {
-       dataJson = {
+        dataJson = {
           "data": Crypto.AES.encrypt(data, encypcode).toString(),
           "createdAt": Date.now(),
         }
@@ -51,43 +51,46 @@ function App() {
         }
       }
 
-        await ref.doc(room ? room : "shared").set(dataJson)
-        setMessage(`shared data successfully at ${new Date(dataJson.createdAt).toUTCString()}`)
-      }
-      setDisable(false)
+      await ref.doc(room ? room : "shared").set(dataJson)
+      setMessage(`shared data successfully at ${new Date(dataJson.createdAt).toUTCString()}`)
     }
+    setDisable(false)
+  }
 
-    const decryptData = async () => {
-     try{
+  const decryptData = async () => {
+    try {
       if (r) {
-        var decoded  = Crypto.AES.decrypt(r, decryptcode).toString(Crypto.enc.Utf8)
+        var decoded = Crypto.AES.decrypt(r, decryptcode).toString(Crypto.enc.Utf8)
         setdecoded(decoded)
         // setMessage(`decrypted data successfully at ${new Date(decoded.createdAt).toUTCString()}`)
       }
-      } catch(e) {
-          setdecoded("wrong decreption key or some error".toUpperCase())
-      }
-     }
-
-
-    ref.doc(room ? room : "shared").onSnapshot((snapshot) => {
-      setR(snapshot?.data()?.data)
-    })
-
-    const em = () => {
-    
+    } catch (e) {
+      setdecoded("wrong decreption key or some error".toUpperCase())
     }
-    return (
-      <div className="App">
-        {/* <h2>Don't worry it's just firebase.. not hard to make anything like it.. why worry so much</h2> */}
-        <textarea rows={20} onChange={(e) => { setData(e.target.value) }} placeholder={"Enter You Text Here"}></textarea>
-        <p> <input type="text" placeholder='Encryption Code (Optional)' onChange={(e)=>{setencypcode(e.target.value)}} /> <input type="text" placeholder='Room Id (Optional)' value={room} onChange={(e)=>{setroom(e.target.value)}}/> <span> <button onClick={shareData}>{!disable ? "Share" : "Sending In Progress..."}</button></span> {message}</p>
-        <p>Recieved data here:</p>
-        <pre id={"r"}>{r}</pre>
-        <pre id={"decoded"}>{decoded}</pre>
-        <p> <input type="text" placeholder='Decryption Code' onChange={(e)=>{setdecryptcode(e.target.value)}} /> <span> <button onClick={decryptData}>{"Decrypt Data"}</button></span></p>
-      </div>
-    )
   }
 
-  export default App
+
+  ref.doc(room ? room : "shared").onSnapshot((snapshot) => {
+    setR(snapshot?.data()?.data)
+  })
+
+  const em = () => {
+
+  }
+  return (
+    <div className="App">
+      <h4 id='wrapper'>Share Your Text With Custom Encryption</h4>
+      <code>
+        <textarea className='input-text' rows={20} onChange={(e) => { setData(e.target.value) }} placeholder={"Enter You Text Here"}></textarea>
+      </code>
+      <p><br /> <input type="text" id='enc' className='inputs' placeholder='Encryption Code (Optional)' onChange={(e) => { setencypcode(e.target.value) }} /> <input id='room' className='inputs' type="text" placeholder='Room Id (Optional)' value={room} onChange={(e) => { setroom(e.target.value) }} /> <span> <button className='btn' onClick={shareData}>{!disable ? "Share" : "Sending In Progress..."}</button></span></p>
+      <p className='text-small'>{message}</p>
+      <p className='text-small'>Recieved data here:</p>
+      <pre id={"r"}>{r}</pre>
+      <p> <input className='inputs' type="text" placeholder='Decryption Code' onChange={(e) => { setdecryptcode(e.target.value) }} /> <span > <button className='btn' onClick={decryptData}>{"Decrypt Data"}</button></span></p>
+      <pre id={"decoded"}>{decoded}</pre>
+    </div>
+  )
+}
+
+export default App
