@@ -69,6 +69,13 @@ function App() {
     }
   }
 
+  const copyDecodedToData = () => {
+    if(decoded){
+      setData(decoded)
+    }else{
+      setData(r)
+    }
+  }
 
   ref.doc(room ? room : "shared").onSnapshot((snapshot) => {
     setR(snapshot?.data()?.data)
@@ -82,10 +89,12 @@ function App() {
       <span id="forkongithub"><a href="https://github.com/himanshurajora/ShareMyText">Fork me on GitHub</a></span>
       <h4 id='wrapper'>Share Your Text With Custom Encryption</h4>
       <code>
-        <textarea className='input-text' rows={20} onChange={(e) => { setData(e.target.value) }} placeholder={"Enter You Text Here"}></textarea>
+        <textarea className='input-text' rows={20} onChange={(e) => { setData(e.target.value) }} value={data} placeholder={"Enter You Text Here"}></textarea>
       </code>
-      <p><br /> <input type="text" id='enc' className='inputs' placeholder='Encryption Code (Optional)' onChange={(e) => { setencypcode(e.target.value) }} /> <input id='room' className='inputs' type="text" placeholder='Room Id (Optional)' value={room} onChange={(e) => { setroom(e.target.value) }} /> <span> <button className='btn' onClick={shareData}>{!disable ? "Share" : "Sending In Progress..."}</button></span></p>
+      <p><br /> <input type="text" id='enc' className='inputs' placeholder='Encryption Code (Optional)' onChange={(e) => { setencypcode(e.target.value) }} /> <input id='room' className='inputs' type="text" placeholder='Room Id (Optional)' value={room} onChange={(e) => { setroom(e.target.value); setdecoded(""); }} /> <span> <button className='btn' onClick={shareData}>{!disable ? "Share" : "Sending In Progress..."}</button></span></p>
       <p className='text-small'>{message}</p>
+      <button className='btn' onClick={copyDecodedToData}>Copy Output To TextArea</button>
+      <br />
       <p className='text-small'>Recieved data here:</p>
       <pre id={"r"}>{r}</pre>
       <p> <input className='inputs' type="text" placeholder='Decryption Code' onChange={(e) => { setdecryptcode(e.target.value) }} /> <span > <button className='btn' onClick={decryptData}>{"Decrypt Data"}</button></span></p>

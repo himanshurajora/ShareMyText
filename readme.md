@@ -15,10 +15,11 @@ so it helped me in both learning and problem solving indeed my own
 - No Authentication required
 - Free
 - Encryption Feature for private data
-
-**New Features**
 - Custom Rooms for preventing data rewrite
 - Custom rooms with encryption
+
+**New Features**
+- Ability To Copy Existing Data In A Room To Text Area for Improving it, No Need of manually copying and pasting. I made it for my own use in task management
 
 Thank You For using our software 
 
@@ -29,3 +30,4 @@ VCF always welcomes you
 **Contributors**
 - Himanshu Jangid
 - Harsh Agarwal
+- Spark117 (The Ghost Dev)
