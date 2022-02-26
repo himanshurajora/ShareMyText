@@ -70,9 +70,9 @@ function App() {
   }
 
   const copyDecodedToData = () => {
-    if(decoded){
+    if (decoded) {
       setData(decoded)
-    }else{
+    } else {
       setData(r)
     }
   }
@@ -81,18 +81,32 @@ function App() {
     setR(snapshot?.data()?.data)
   })
 
-  const em = () => {
+  const handleTextInput = (event: any) => {
+    // detect control + enter pressed 
+    if (event.keyCode === 13 && event.ctrlKey) {
+      shareData()
+    }
+  }
 
+  const copyOutput = async () => {
+    // copy decoded if exists otherwise the recieved text to clipboard
+    if(decoded){
+      await navigator.clipboard.writeText(decoded)
+    }else{
+      await navigator.clipboard.writeText(r)
+    }
+    console.log("copied")
   }
   return (
     <div className="App">
       <span id="forkongithub"><a href="https://github.com/himanshurajora/ShareMyText">Fork me on GitHub</a></span>
       <h4 id='wrapper'>Share Your Text With Custom Encryption</h4>
       <code>
-        <textarea className='input-text' rows={20} onChange={(e) => { setData(e.target.value) }} value={data} placeholder={"Enter You Text Here"}></textarea>
+        <textarea className='input-text' rows={20} onKeyDown={handleTextInput} onChange={(e) => { setData(e.target.value) }} value={data} placeholder={"Enter You Text Here, Press Ctrl + Enter to share"}></textarea>
       </code>
       <p><br /> <input type="text" id='enc' className='inputs' placeholder='Encryption Code (Optional)' onChange={(e) => { setencypcode(e.target.value) }} /> <input id='room' className='inputs' type="text" placeholder='Room Id (Optional)' value={room} onChange={(e) => { setroom(e.target.value); setdecoded(""); }} /> <span> <button className='btn' onClick={shareData}>{!disable ? "Share" : "Sending In Progress..."}</button></span></p>
-      <p className='text-small'>{message}</p>
+      <p className='text-small'>{message}</p> 
+      <button className='btn' onClick={copyOutput}>Copy Output</button>
       <button className='btn' onClick={copyDecodedToData}>Copy Output To TextArea</button>
       <br />
       <p className='text-small'>Recieved data here:</p>

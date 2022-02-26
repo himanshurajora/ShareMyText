@@ -77,19 +77,20 @@ body {
 }
 
 .btn {
-    background: rgb(30, 30, 30);
-    color: grey;
+    background: rgb(17, 255, 48);
+    color: rgb(36, 36, 36);
     font-size: large;
     padding: 10px;
     border: none;
     border-radius: 5px;
+    margin-left: 5px;
 }
 
 .btn:hover {
     background: rgb(30, 30, 30);
     color: rgb(0, 255, 13);
+    box-shadow: 0px 2px 5px rgb(0, 255, 13);
 }
-
 ::-webkit-scrollbar {
     width: 5px;
     height: 5px;
