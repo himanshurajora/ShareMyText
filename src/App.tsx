@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import logo from './logo.svg'
+import React, { useState, useEffect, useRef, ChangeEvent } from 'react'
 import './App.css'
 import firebase from 'firebase'
-import app from 'firebase/app'
 import 'firebase/firestore'
 import * as Crypto from 'crypto-js'
 // import hljs, {HLJSApi} from 'highlight.js'
@@ -34,6 +32,9 @@ function App() {
   const [decoded, setdecoded] = useState("")
   const [room, setroom] = useState("");
   const [r, setR] = useState("")
+  const textInput = useRef<HTMLTextAreaElement>(null)
+  const fileInput = useRef<HTMLInputElement>(null)
+
 
   const shareData = async () => {
     setDisable(true)
@@ -69,17 +70,11 @@ function App() {
     }
   }
 
-  const copyDecodedToData = () => {
-    if (decoded) {
-      setData(decoded)
-    } else {
-      setData(r)
-    }
-  }
 
-  ref.doc(room ? room : "shared").onSnapshot((snapshot) => {
+  ref.doc(room ? room : "shared").onSnapshot((snapshot: any) => {
     setR(snapshot?.data()?.data)
   })
+  // 
 
   const handleTextInput = (event: any) => {
     // detect control + enter pressed 
@@ -90,22 +85,60 @@ function App() {
 
   const copyOutput = async () => {
     // copy decoded if exists otherwise the recieved text to clipboard
-    if(decoded){
+    if (decoded) {
       await navigator.clipboard.writeText(decoded)
-    }else{
+    } else {
       await navigator.clipboard.writeText(r)
     }
     console.log("copied")
   }
+
+  const copyDecodedToData = () => {
+    if (decoded) {
+      setData(decoded)
+    } else {
+      setData(r)
+    }
+  }
+
+  const handleFileDrag = () => {
+    fileInput.current!.style.visibility = "visible"
+    // make existing files null so that they can be selected again
+    fileInput.current!.value = null
+  }
+
+  const handleFileDrop = (e : ChangeEvent<HTMLInputElement>) => {
+    // read fileinput file as text
+    var file = e.target.files[0]
+    var reader = new FileReader()
+    console.log("here");
+    
+    reader.onloadend = (e) => {
+      fileInput.current!.style.visibility = "hidden"
+      setData(reader.result as string)
+      fileInput.current.files = null
+    }
+    reader.readAsText(file)
+  }
+
+  const handleFileDragOut = () =>{
+    fileInput.current!.style.visibility = "hidden"
+    console.log("drag out");
+    
+  }
+
   return (
-    <div className="App">
+    <div className="App" onKeyDown={handleTextInput}>
       <span id="forkongithub"><a href="https://github.com/himanshurajora/ShareMyText">Fork me on GitHub</a></span>
       <h4 id='wrapper'>Share Your Text With Custom Encryption</h4>
       <code>
-        <textarea className='input-text' rows={20} onKeyDown={handleTextInput} onChange={(e) => { setData(e.target.value) }} value={data} placeholder={"Enter You Text Here, Press Ctrl + Enter to share"}></textarea>
+        <div className="data-section">
+          <input type="file" name="" id="" onChange={handleFileDrop}  onDragLeave={handleFileDragOut}  ref={fileInput} />
+          <textarea className='input-text' rows={20} ref={textInput} onDragEnter={handleFileDrag} onKeyDown={handleTextInput} onChange={(e) => { setData(e.target.value) }} value={data} placeholder={"Enter You Text Here, Press Ctrl + Enter to share"}></textarea>
+        </div>
       </code>
       <p><br /> <input type="text" id='enc' className='inputs' placeholder='Encryption Code (Optional)' onChange={(e) => { setencypcode(e.target.value) }} /> <input id='room' className='inputs' type="text" placeholder='Room Id (Optional)' value={room} onChange={(e) => { setroom(e.target.value); setdecoded(""); }} /> <span> <button className='btn' onClick={shareData}>{!disable ? "Share" : "Sending In Progress..."}</button></span></p>
-      <p className='text-small'>{message}</p> 
+      <p className='text-small'>{message}</p>
       <button className='btn' onClick={copyOutput}>Copy Output</button>
       <button className='btn' onClick={copyDecodedToData}>Copy Output To TextArea</button>
       <br />

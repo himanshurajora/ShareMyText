@@ -17,9 +17,14 @@ so it helped me in both learning and problem solving indeed my own
 - Encryption Feature for private data
 - Custom Rooms for preventing data rewrite
 - Custom rooms with encryption
+- Ability To Copy Existing Data In A Room To Text Area for Improving it, No Need of manually copying and pasting. I made it for my own use in task management
+- Copy to Clipboard
+
 
 **New Features**
-- Ability To Copy Existing Data In A Room To Text Area for Improving it, No Need of manually copying and pasting. I made it for my own use in task management
+- File drag and drop feature -> copies the file's text to the textarea
+- Ctrl + Enter works in all input feilds
+
 
 Thank You For using our software 
 
