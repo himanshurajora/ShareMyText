@@ -176,6 +176,10 @@ body {
     transform: translate(50%, -50%);
 }
 
+a {
+    text-decoration: none;
+}
+
 @media screen and (min-width:800px) {
     #forkongithub {
         position: fixed;
