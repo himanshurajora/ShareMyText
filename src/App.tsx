@@ -19,6 +19,7 @@ firebase.initializeApp(firebaseConfig);
 interface Data {
   data: string;
   createdAt: number;
+  fileName: string;
 }
 
 function App() {
@@ -33,15 +34,17 @@ function App() {
   const [room, setroom] = useState("");
   const [downloadUrl, setDownloadUrl] = useState("");
   const [contentType, setContentType] = useState("text/plain");
-  const [fileName, setFileName] = useState("demo");
+  const [fileName, setFileName] = useState("demo.txt");
   const [r, setR] = useState("");
   const textInput = useRef<HTMLTextAreaElement>(null);
   const fileInput = useRef<HTMLInputElement>(null);
 
   const shareData = async () => {
+
+    console.log(fileName)
     setDisable(true);
     if (data) {
-      var dataJson = { data: "some data", createdAt: 1337 };
+      var dataJson : any = {};
       if (encypcode) {
         dataJson = {
           data: Crypto.AES.encrypt(data, encypcode).toString(),
@@ -80,8 +83,8 @@ function App() {
 
   ref.doc(room ? room : "shared").onSnapshot((snapshot: any) => {
     setR(snapshot?.data()?.data);
+    setFileName(snapshot?.data()?.fileName);
   });
-  //
 
   const handleTextInput = (event: any) => {
     // detect control + enter pressed
@@ -97,7 +100,6 @@ function App() {
     } else {
       await navigator.clipboard.writeText(r);
     }
-    console.log("copied");
   };
 
   const copyDecodedToData = () => {
@@ -114,13 +116,14 @@ function App() {
     fileInput.current!.value = null;
   };
 
-  const handleFileDrop = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleFileDrop = async (e: ChangeEvent<HTMLInputElement>) => {
     // read fileinput file as text
     var file = e.target.files[0];
     var reader = new FileReader();
+    
+    
     setFileName(file.name);
     setContentType(file.type);
-    console.log("here");
 
     reader.onloadend = (e) => {
       fileInput.current!.style.visibility = "hidden";
@@ -132,13 +135,13 @@ function App() {
 
   const handleFileDragOut = () => {
     fileInput.current!.style.visibility = "hidden";
-    console.log("drag out");
   };
 
   useEffect(() => {
     Download();
   }, [contentType, fileName, data]);
 
+  
   const Download = () => {
     const byteNumbers = new Array(data.length);
     for (let i = 0; i < data.length; i++) {
@@ -218,9 +221,9 @@ function App() {
       <button className="btn" onClick={copyDecodedToData}>
         Copy Output To TextArea
       </button>
-      <a className="btn" href={downloadUrl} download={fileName}>
-        Download
-      </a>
+      <button disabled className="btn" aria-disabled='true'>
+        Download (Disabled for now)
+      </button>
       <br />
       <p className="text-small">Recieved data here:</p>
       <pre id={"r"}>{r}</pre>
