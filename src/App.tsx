@@ -44,7 +44,7 @@ function App() {
     console.log(fileName)
     setDisable(true);
     if (data) {
-      var dataJson : any = {};
+      var dataJson: any = {};
       if (encypcode) {
         dataJson = {
           data: Crypto.AES.encrypt(data, encypcode).toString(),
@@ -120,8 +120,8 @@ function App() {
     // read fileinput file as text
     var file = e.target.files[0];
     var reader = new FileReader();
-    
-    
+
+
     setFileName(file.name);
     setContentType(file.type);
 
@@ -137,20 +137,17 @@ function App() {
     fileInput.current!.style.visibility = "hidden";
   };
 
-  useEffect(() => {
-    Download();
-  }, [contentType, fileName, data]);
-
-  
   const Download = () => {
-    const byteNumbers = new Array(data.length);
-    for (let i = 0; i < data.length; i++) {
-      byteNumbers[i] = data.charCodeAt(i);
+    var l = document.createElement("a");
+    if (decoded.trim() !== "") {
+      l.href = URL.createObjectURL(new Blob([decoded], { type: "text/plain" }));
+      l.download = "sharemytext.txt"
+      l.click()
+    }else{
+      l.href = URL.createObjectURL(new Blob([r], { type: "text/plain" }));
+      l.download = "sharemytext.txt"
+      l.click()
     }
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], { type: contentType });
-    const blobUrl = URL.createObjectURL(blob);
-    setDownloadUrl(blobUrl);
   };
 
   return (
@@ -221,8 +218,8 @@ function App() {
       <button className="btn" onClick={copyDecodedToData}>
         Copy Output To TextArea
       </button>
-      <button disabled className="btn" aria-disabled='true'>
-        Download (Disabled for now)
+      <button onClick={Download} className="btn" aria-disabled='true'>
+        Download
       </button>
       <br />
       <p className="text-small">Recieved data here:</p>
