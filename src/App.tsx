@@ -3,6 +3,14 @@ import "./App.css";
 import firebase from "firebase";
 import "firebase/firestore";
 import * as Crypto from "crypto-js";
+import { appIpcRenderer, getIpcRenderer } from "./ipcRenderer.config";
+declare global {
+  interface Window {
+    Cypress: any;
+    store: any;
+  }
+}
+
 // import hljs, {HLJSApi} from 'highlight.js'
 var firebaseConfig = {
   apiKey: "AIzaSyCTvOjkdho2r7l4m-GVPYiSrEuazQeYu2s",
@@ -40,8 +48,7 @@ function App() {
   const fileInput = useRef<HTMLInputElement>(null);
 
   const shareData = async () => {
-
-    console.log(fileName)
+    console.log(fileName);
     setDisable(true);
     if (data) {
       var dataJson: any = {};
@@ -121,7 +128,6 @@ function App() {
     var file = e.target.files[0];
     var reader = new FileReader();
 
-
     setFileName(file.name);
     setContentType(file.type);
 
@@ -141,14 +147,33 @@ function App() {
     var l = document.createElement("a");
     if (decoded.trim() !== "") {
       l.href = URL.createObjectURL(new Blob([decoded], { type: "text/plain" }));
-      l.download = "sharemytext.txt"
-      l.click()
-    }else{
+      l.download = "sharemytext.txt";
+      l.click();
+    } else {
       l.href = URL.createObjectURL(new Blob([r], { type: "text/plain" }));
-      l.download = "sharemytext.txt"
-      l.click()
+      l.download = "sharemytext.txt";
+      l.click();
     }
   };
+
+  const appIpcRenderer = getIpcRenderer(window);
+
+  useEffect(() => {
+    if (appIpcRenderer) {
+      window.mockIpcRenderer = appIpcRenderer;
+      appIpcRenderer.on("share-data", (data: string) => {
+        console.log(data);
+      });
+    }
+
+    return () => {
+      appIpcRenderer.removeAllListeners();
+    };
+  }, []);
+
+  const [heading, setHeading] = useState(
+    "Share Your Text With Custom Encryption"
+  );
 
   return (
     <div className="App" onKeyDown={handleTextInput}>
@@ -157,7 +182,7 @@ function App() {
           Fork me on GitHub
         </a>
       </span>
-      <h4 id="wrapper">Share Your Text With Custom Encryption</h4>
+      <h4 id="wrapper">{heading}</h4>
       <code>
         <div className="data-section">
           <input
@@ -218,7 +243,7 @@ function App() {
       <button className="btn" onClick={copyDecodedToData}>
         Copy Output To TextArea
       </button>
-      <button onClick={Download} className="btn" aria-disabled='true'>
+      <button onClick={Download} className="btn" aria-disabled="true">
         Download
       </button>
       <br />
