@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+import { should } from "chai";
 import "cypress-react-selector";
 
 interface MockIpcRenderer {
@@ -9,21 +10,27 @@ interface MockIpcRenderer {
 }
 
 interface Window {
-  mockIpcRenderer: MockIpcRenderer;
+  appIpcRenderer: MockIpcRenderer;
 }
 
 describe("Hello World", () => {
   beforeEach(() => {
     cy.visit("http://localhost:3000/");
-    cy.waitForReact();
   });
   it("should pass", () => {
     cy.window().contains("Share Your Text With Custom Encryption");
   });
-  it("should open freely", () => {
-    cy.window().wait(2000);
+  // test for mockIpc renderer to defined
+  it("should pass", () => {
+    // should().exist(window.mockIpcRenderer);
+  });
+
+  it("should send event0", () => {
+    cy.window().should("have.property", "mockIpcRenderer");
+    cy.wait(4000);
     cy.window().then((win) => {
-      (win as any).mockIpcRenderer.send("share-data", "hello");
+      (win as any).appIpcRenderer.send("share-data", "hello");
+      console.log("From Cypress", (win as any).mockIpcRenderer);
     });
   });
 });

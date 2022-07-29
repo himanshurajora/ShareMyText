@@ -160,7 +160,8 @@ function App() {
 
   useEffect(() => {
     if (appIpcRenderer) {
-      window.mockIpcRenderer = appIpcRenderer;
+      // console.log(appIpcRenderer);
+      window.appIpcRenderer = appIpcRenderer;
       appIpcRenderer.on("share-data", (data: string) => {
         console.log(data);
       });
