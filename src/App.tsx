@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, ChangeEvent } from "react";
+import ReactLinkify from "react-linkify";
 import "./App.css";
 import firebase from "firebase";
 import "firebase/firestore";
@@ -249,7 +250,9 @@ function App() {
       </button>
       <br />
       <p className="text-small">Recieved data here:</p>
-      <pre id={"r"}>{r}</pre>
+      <ReactLinkify>
+        <pre id={"r"}>{r}</pre>
+      </ReactLinkify>
       <p>
         {" "}
         <input
@@ -267,7 +270,9 @@ function App() {
           </button>
         </span>
       </p>
-      <pre id={"decoded"}>{decoded}</pre>
+      <ReactLinkify>
+        <pre id={"decoded"}>{decoded}</pre>
+      </ReactLinkify>
     </div>
   );
 }
