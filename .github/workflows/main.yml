@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - master
-    paths:
-      - "src/**"
+    # paths:
+    #  - "src/**"
 
 jobs:
   deploy_live_website:
