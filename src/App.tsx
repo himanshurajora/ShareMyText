@@ -4,7 +4,6 @@ import "./App.css";
 import firebase from "firebase";
 import "firebase/firestore";
 import * as Crypto from "crypto-js";
-import { appIpcRenderer, getIpcRenderer } from "./ipcRenderer.config";
 declare global {
   interface Window {
     Cypress: any;
