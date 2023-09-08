@@ -250,7 +250,13 @@ function App() {
       </button>
       <br />
       <p className="text-small">Recieved data here:</p>
-      <ReactLinkify>
+      <ReactLinkify
+       componentDecorator={(decoratedHref, decoratedText, key) => (
+        <a target="blank" href={decoratedHref} key={key}>
+            {decoratedText}
+        </a>
+        )}  
+      >
         <pre id={"r"}>{r}</pre>
       </ReactLinkify>
       <p>
