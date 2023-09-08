@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "types": ["cypress", "node", "cypress-react-selector"],
+    "types": ["node"],
     "target": "ESNext",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,

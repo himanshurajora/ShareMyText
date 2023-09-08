@@ -1,15 +1,9 @@
 import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import ReactLinkify from "react-linkify";
 import "./App.css";
-import firebase from "firebase";
-import "firebase/firestore";
+import {initializeApp} from "firebase/app";
+import {addDoc, collection, doc, getFirestore, onSnapshot, setDoc} from "firebase/firestore";
 import * as Crypto from "crypto-js";
-declare global {
-  interface Window {
-    Cypress: any;
-    store: any;
-  }
-}
 
 // import hljs, {HLJSApi} from 'highlight.js'
 var firebaseConfig = {
@@ -22,7 +16,7 @@ var firebaseConfig = {
   measurementId: "G-WWFW3PM397",
 };
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
 interface Data {
   data: string;
@@ -31,8 +25,8 @@ interface Data {
 }
 
 function App() {
-  var db = firebase.firestore();
-  var ref = db.collection("shareData");
+  const firestore = getFirestore(app)
+  var db = collection(firestore, "shareData");
   const [data, setData] = useState("");
   const [message, setMessage] = useState("");
   const [disable, setDisable] = useState(false);
@@ -64,7 +58,7 @@ function App() {
         };
       }
 
-      await ref.doc(room ? room : "shared").set(dataJson);
+      await setDoc(doc(db, room ? room : "shared"), dataJson);
       setMessage(
         `shared data successfully at ${new Date(
           dataJson.createdAt
@@ -88,10 +82,11 @@ function App() {
     }
   };
 
-  ref.doc(room ? room : "shared").onSnapshot((snapshot: any) => {
+  onSnapshot(doc(db, room ? room : "shared"), (snapshot) => {
     setR(snapshot?.data()?.data);
     setFileName(snapshot?.data()?.fileName);
-  });
+
+  })
 
   const handleTextInput = (event: any) => {
     // detect control + enter pressed
@@ -234,7 +229,7 @@ function App() {
       <br />
       <p className="text-small">Recieved data here:</p>
       <ReactLinkify
-       componentDecorator={(decoratedHref, decoratedText, key) => (
+      componentDecorator={(decoratedHref, decoratedText, key) => (
         <a target="blank" href={decoratedHref} key={key}>
             {decoratedText}
         </a>
