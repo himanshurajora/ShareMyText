@@ -3,7 +3,7 @@ name: Deploy to Firebase
 on:
   push:
     branches:
-      - main
+      - master
     # Optionally configure to run only for specific files. For example:
     # paths:
     # - "website/**"
