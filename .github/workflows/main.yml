@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-      - "website/**"
+      - "src/**"
 
 jobs:
   deploy_live_website:
