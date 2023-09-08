@@ -157,22 +157,6 @@ function App() {
     }
   };
 
-  const appIpcRenderer = getIpcRenderer(window);
-
-  useEffect(() => {
-    if (appIpcRenderer) {
-      // console.log(appIpcRenderer);
-      window.appIpcRenderer = appIpcRenderer;
-      appIpcRenderer.on("share-data", (data: string) => {
-        console.log(data);
-      });
-    }
-
-    return () => {
-      appIpcRenderer.removeAllListeners();
-    };
-  }, []);
-
   const [heading, setHeading] = useState(
     "Share Your Text With Custom Encryption"
   );
