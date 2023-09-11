@@ -1,6 +1,11 @@
 {
   "name": "sharemytext",
   "version": "0.0.0",
+  "author": {
+    "name": "Himanshu Jangid",
+    "email": "iamahalofan@gmail.com",
+    "url": "https://himanshujangid.com"
+  },
   "scripts": {
     "dev": "vite dev",
     "build": "tsc && vite build",
@@ -25,5 +30,6 @@
   },
   "devDependencies": {
     "jest": "^29.6.4"
-  }
+  },
+  "repository": "https://github.com/himanshurajora/ShareMyText"
 }
