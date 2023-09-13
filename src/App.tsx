@@ -162,7 +162,7 @@ function App() {
           Fork me on GitHub
         </a>
       </span>
-      <h3 id="wrapper">{heading}. Made my <a href="https://github.com/himanshurajora">@himanshurajora</a></h3>
+      <h3 id="wrapper">{heading}. Made by <a href="https://github.com/himanshurajora">@himanshurajora</a></h3>
       <code>
         <div className="data-section">
           <input
