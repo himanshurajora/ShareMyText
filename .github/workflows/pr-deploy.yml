@@ -1,4 +1,4 @@
-name: Deploy to Firebase
+name: Deploy to Firebase From PR
 
 on:
   pull_request:
