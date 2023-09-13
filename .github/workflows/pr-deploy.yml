@@ -2,8 +2,6 @@ name: Deploy to Firebase From PR
 
 on:
   pull_request:
-    paths:
-      - "src/**"
 
 jobs:
   deploy_live_website:
