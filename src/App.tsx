@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import ReactLinkify from "react-linkify";
 import "./App.css";
-import {initializeApp} from "firebase/app";
-import {addDoc, collection, doc, getFirestore, onSnapshot, setDoc} from "firebase/firestore";
+import { initializeApp } from "firebase/app";
+import { addDoc, collection, doc, getFirestore, onSnapshot, setDoc } from "firebase/firestore";
 import * as Crypto from "crypto-js";
 
 // import hljs, {HLJSApi} from 'highlight.js'
@@ -151,9 +151,25 @@ function App() {
     }
   };
 
+
+  const heading1 = "Share Your Text With Custom Encryption.";
+  const heading2 = "Warning ⚠️ (Database will be truncated on 20 Sep, 2023).";
+
   const [heading, setHeading] = useState(
-    "Share Your Text With Custom Encryption"
+    heading1
   );
+
+  const toggleHeading = () => {
+    if (heading === heading1) {
+      setHeading(heading2);
+    } if (heading === heading2) { setHeading(heading1) }
+  }
+
+  useEffect(() => {
+    setTimeout(() => {
+      toggleHeading();
+    }, 5000)
+  }, []);
 
   return (
     <div className="App" onKeyDown={handleTextInput}>
@@ -162,7 +178,7 @@ function App() {
           Fork me on GitHub
         </a>
       </span>
-      <h3 id="wrapper">{heading}. Made by <a href="https://github.com/himanshurajora">@himanshurajora</a></h3>
+      <h3 id="wrapper">{heading} Made by <a href="https://github.com/himanshurajora">@himanshurajora</a></h3>
       <code>
         <div className="data-section">
           <input
@@ -229,11 +245,11 @@ function App() {
       <br />
       <p className="text-small">Recieved data here:</p>
       <ReactLinkify
-      componentDecorator={(decoratedHref, decoratedText, key) => (
-        <a target="blank" href={decoratedHref} key={key}>
+        componentDecorator={(decoratedHref, decoratedText, key) => (
+          <a target="blank" href={decoratedHref} key={key}>
             {decoratedText}
-        </a>
-        )}  
+          </a>
+        )}
       >
         <pre id={"r"}>{r}</pre>
       </ReactLinkify>
@@ -257,6 +273,9 @@ function App() {
       <ReactLinkify>
         <pre id={"decoded"}>{decoded}</pre>
       </ReactLinkify>
+      <p style={{color: "white"}}>
+        Hi there! ShareMyText is going to have a good future. We are soon going to make some changes regarding data security. Please raise issues on <a href="https://github.com/himanshurajora/ShareMyText" target="_blank">Github</a> if you want to provide any suggesions.
+      </p>
     </div>
   );
 }
