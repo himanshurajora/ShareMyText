@@ -152,7 +152,7 @@ function App() {
 
 
   const heading1 = "Share Your Text With Custom Encryption.";
-  const heading2 = "Warning ⚠️ (Database will be truncated on 20 Sep, 2023).";
+  const heading2 = "Warning ⚠️ (Everything before 21 Sep. has been removed).";
 
   const [heading, setHeading] = useState(
     heading1
@@ -173,11 +173,15 @@ function App() {
   return (
     <div className="App" onKeyDown={handleTextInput}>
       <span id="forkongithub">
-        <a href="https://github.com/himanshurajora/ShareMyText">
-          Fork me on GitHub
+        <a href="https://github.com/himanshurajora/ShareMyText/issues" target="_blank">
+          Raise a suggestion 🙋
         </a>
       </span>
-      <h3 id="wrapper">{heading} Made by <a href="https://github.com/himanshurajora">@himanshurajora</a></h3>
+      <h3 id="wrapper">
+        <abbr title='Hi there! ShareMyText is going to have a good future. We are soon going to make some changes regarding data security. If you have any suggestions in your mide, please raise an issues.'>
+        {heading}
+        </abbr>
+        {' '}  Made by <a href="https://github.com/himanshurajora">@himanshurajora</a></h3>
       <code>
         <div className="data-section">
           <input
@@ -272,9 +276,6 @@ function App() {
       <ReactLinkify>
         <pre id={"decoded"}>{decoded}</pre>
       </ReactLinkify>
-      <p style={{color: "white"}}>
-        Hi there! ShareMyText is going to have a good future. We are soon going to make some changes regarding data security. Please raise issues on <a href="https://github.com/himanshurajora/ShareMyText" target="_blank">Github</a> if you want to provide any suggesions.
-      </p>
     </div>
   );
 }
