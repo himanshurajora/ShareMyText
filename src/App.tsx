@@ -6,14 +6,13 @@ import { addDoc, collection, doc, getFirestore, onSnapshot, setDoc } from "fireb
 import * as Crypto from "crypto-js";
 
 // import hljs, {HLJSApi} from 'highlight.js'
-var firebaseConfig = {
-  apiKey: "AIzaSyCTvOjkdho2r7l4m-GVPYiSrEuazQeYu2s",
-  authDomain: "chat-fire-test-756d8.firebaseapp.com",
-  projectId: "chat-fire-test-756d8",
-  storageBucket: "chat-fire-test-756d8.appspot.com",
-  messagingSenderId: "945038291938",
-  appId: "1:945038291938:web:b4c7699615c23068967fbb",
-  measurementId: "G-WWFW3PM397",
+const firebaseConfig = {
+  apiKey: "AIzaSyCfGQu6kAByz448GCVzKC9SJf6qcBpzFrc",
+  authDomain: "sharemytext.firebaseapp.com",
+  projectId: "sharemytext",
+  storageBucket: "sharemytext.appspot.com",
+  messagingSenderId: "37383843087",
+  appId: "1:37383843087:web:981732780de8f97030e27a",
 };
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
