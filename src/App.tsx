@@ -189,7 +189,7 @@ function App() {
       </h3>
       <div className="container">
         <div className="left">
-          <p className="text-small">Send Data Here:</p>
+          <p className="text-small">Send Data</p>
           <code>
             <div className="data-section">
               <input
