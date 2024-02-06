@@ -8,47 +8,56 @@
     padding: 0;
     margin: 0;
 }
-
+.heading {
+    text-align: center;
+    color: rgb(133, 32, 222);
+    margin-bottom: 0.5rem;
+}
 textarea {
     width: 100%;
-    color: rgb(0, 255, 13);
-    background-color: rgb(49, 49, 49);
+    color: rgb(35, 35, 35);
     border: none;
+    background-color: rgb(232, 232, 232);
     padding: 20px;
     border-radius: 10px;
+    /* border: 1px solid rgb(158, 47, 255); */
 }
 
 textarea:focus {
-    outline: 4px solid rgba(255, 255, 255, 0.37);
+    outline: 2px solid rgb(133, 32, 222);
 }
 
 #wrapper {
     font-family: 'Paytone One', sans-serif;
-    color: rgb(0, 255, 13);
-    font-size: x-large;
-    padding: 20px 10px;
+    color: rgb(103, 103, 103);
+        font-size: medium;
+        padding-bottom: 1.5rem;
+        text-align: center;
 }
 
 .text-small {
-    font-size: medium;
-    color: rgb(0, 255, 13);
-    padding: 10px;
+    font-size: large;
+        color: rgb(35, 35, 35);
+        margin-bottom: 10px;
+    }
+    
+    .btn-container {
+        margin-top: 1rem;
 }
 
 #r {
-    background-color: rgb(49, 49, 49);
-    height: 20%;
+    background-color: rgb(232, 232, 232);
+        height: 26%;
     width: 100%;
     padding: 20px;
     border: none;
     border-radius: 10px;
     overflow-x: scroll;
-    margin: 10px 0px;
-    color: rgb(0, 255, 13);
+        color: rgb(35, 35, 35);
 }
 
 #decoded {
-    background-color: rgb(0, 173, 52);
+    background-color: gb(35, 35, 35);
     height: 20%;
     width: 100%;
     padding: 20px;
@@ -60,13 +69,25 @@ textarea:focus {
 }
 
 body {
-    background-color: #141414;
+    background-color: white;
     font-family: 'Paytone One', sans-serif;
 }
 
+.container {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 75vh;
+}
+
+.right {
+    padding-left: 5%;
+}
 .inputs {
-    background-color: rgb(49, 49, 49);
-    color: rgb(0, 255, 13);
+    background-color: rgb(234, 234, 234);
+        color: rgb(35, 35, 35);
     font-size: large;
     padding: 10px;
     border: none;
@@ -78,26 +99,28 @@ body {
 }
 
 .btn {
-    background: rgb(17, 255, 48);
-    color: rgb(36, 36, 36);
+    background: rgb(133, 32, 222);
+        color: rgb(250, 250, 250);
     font-size: large;
     padding: 10px;
     border: none;
     border-radius: 5px;
+    cursor: pointer;
     margin-left: 5px;
 }
 
 .btn:hover {
     background: rgb(30, 30, 30);
-    color: rgb(0, 255, 13);
-    box-shadow: 0px 2px 5px rgb(0, 255, 13);
+    color: rgb(244, 244, 244);
+        box-shadow: 0px 2px 5px rgb(35, 35, 35);
 }
 
 .btn:disabled{
-    background: rgb(127, 206, 150);
+    background: rgb(133, 32, 222);
     color: rgb(68, 68, 68);
     box-shadow: 0px 2px 5px rgb(0, 0, 0);
 }
+
 
 ::-webkit-scrollbar {
     width: 5px;
@@ -105,7 +128,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgb(0, 104, 31);
+    background: rgb(133, 32, 222);
     border-radius: 10px;
 }
 
@@ -124,7 +147,7 @@ body {
 }
 
 #forkongithub a:hover {
-    background: rgb(0, 219, 18);
+    background: rgb(133, 32, 222);
     color: #fff;
 }
 
@@ -182,8 +205,13 @@ body {
     right: 50%;
     transform: translate(50%, -50%);
 }
-
+@media screen and (max-width:720px) {
+    .container {
+        flex-direction: column;
+    }
+}
 @media screen and (min-width:800px) {
+
     #forkongithub {
         position: fixed;
         display: block;
@@ -209,5 +237,5 @@ body {
 }
 
 a{
-    color:rgb(4, 242, 255);
+    color: rgb(133, 32, 222);
 }

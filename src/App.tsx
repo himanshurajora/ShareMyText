@@ -173,109 +173,119 @@ function App() {
   return (
     <div className="App" onKeyDown={handleTextInput}>
       <span id="forkongithub">
-        <a href="https://github.com/himanshurajora/ShareMyText/issues" target="_blank">
+        <a
+          href="https://github.com/himanshurajora/ShareMyText/issues"
+          target="_blank"
+        >
           Raise a suggestion 🙋
         </a>
       </span>
+      <h1 className="heading">Share_My_Text</h1>
       <h3 id="wrapper">
-        <abbr title='Hi there! ShareMyText is going to have a good future. We are soon going to make some changes regarding data security. If you have any suggestions in your mide, please raise an issues.'>
-        {heading}
-        </abbr>
-        {' '}  Made by <a href="https://github.com/himanshurajora">@himanshurajora</a></h3>
-      <code>
-        <div className="data-section">
-          <input
-            type="file"
-            name=""
-            id=""
-            onChange={handleFileDrop}
-            onDragLeave={handleFileDragOut}
-            ref={fileInput}
-          />
-          <textarea
-            className="input-text"
-            rows={20}
-            ref={textInput}
-            onDragEnter={handleFileDrag}
-            onKeyDown={handleTextInput}
-            onChange={(e) => {
-              setData(e.target.value);
-            }}
-            value={data}
-            placeholder={"Enter You Text Here, Press Ctrl + Enter to share"}
-          ></textarea>
+        <abbr title="Hi there! ShareMyText is going to have a good future. We are soon going to make some changes regarding data security. If you have any suggestions in your mide, please raise an issues.">
+          {heading}
+        </abbr>{" "}
+        Made by <a href="https://github.com/himanshurajora">@himanshurajora</a>
+      </h3>
+      <div className="container">
+        <div className="left">
+          <p className="text-small">Send Data Here:</p>
+          <code>
+            <div className="data-section">
+              <input
+                type="file"
+                name=""
+                id=""
+                onChange={handleFileDrop}
+                onDragLeave={handleFileDragOut}
+                ref={fileInput}
+              />
+              <textarea
+                className="input-text"
+                rows={19}
+                ref={textInput}
+                onDragEnter={handleFileDrag}
+                onKeyDown={handleTextInput}
+                onChange={(e) => {
+                  setData(e.target.value);
+                }}
+                value={data}
+                placeholder={"Enter You Text Here, Press Ctrl + Enter to share"}
+              ></textarea>
+            </div>
+          </code>
+          <div className="btn-container">
+            <input
+              type="text"
+              id="enc"
+              className="inputs"
+              placeholder="Encryption Code (Optional)"
+              onChange={(e) => {
+                setencypcode(e.target.value);
+              }}
+            />{" "}
+            <input
+              id="room"
+              className="inputs"
+              type="text"
+              placeholder="Room Id (Optional)"
+              value={room}
+              onChange={(e) => {
+                setroom(e.target.value);
+                setdecoded("");
+              }}
+            />{" "}
+            <span>
+              {" "}
+              <button className="btn" onClick={shareData}>
+                {!disable ? "Share" : "Sending In Progress..."}
+              </button>
+            </span>
+          </div>
+          <p className="text-small">{message}</p>
+          <button className="btn" onClick={copyOutput}>
+            Copy Output
+          </button>
+          <button className="btn" onClick={copyDecodedToData}>
+            Copy Output To TextArea
+          </button>
+          <button onClick={Download} className="btn" aria-disabled="true">
+            Download
+          </button>
         </div>
-      </code>
-      <p>
-        <br />{" "}
-        <input
-          type="text"
-          id="enc"
-          className="inputs"
-          placeholder="Encryption Code (Optional)"
-          onChange={(e) => {
-            setencypcode(e.target.value);
-          }}
-        />{" "}
-        <input
-          id="room"
-          className="inputs"
-          type="text"
-          placeholder="Room Id (Optional)"
-          value={room}
-          onChange={(e) => {
-            setroom(e.target.value);
-            setdecoded("");
-          }}
-        />{" "}
-        <span>
-          {" "}
-          <button className="btn" onClick={shareData}>
-            {!disable ? "Share" : "Sending In Progress..."}
-          </button>
-        </span>
-      </p>
-      <p className="text-small">{message}</p>
-      <button className="btn" onClick={copyOutput}>
-        Copy Output
-      </button>
-      <button className="btn" onClick={copyDecodedToData}>
-        Copy Output To TextArea
-      </button>
-      <button onClick={Download} className="btn" aria-disabled="true">
-        Download
-      </button>
-      <br />
-      <p className="text-small">Recieved data here:</p>
-      <ReactLinkify
-        componentDecorator={(decoratedHref, decoratedText, key) => (
-          <a target="blank" href={decoratedHref} key={key}>
-            {decoratedText}
-          </a>
-        )}
-      >
-        <pre id={"r"}>{r}</pre>
-      </ReactLinkify>
-      <p>
-        {" "}
-        <input
-          className="inputs"
-          type="text"
-          placeholder="Decryption Code"
-          onChange={(e) => {
-            setdecryptcode(e.target.value);
-          }}
-        />{" "}
-        <span>
-          {" "}
-          <button className="btn" onClick={decryptData}>
-            {"Decrypt Data"}
-          </button>
-        </span>
-      </p>
-      <ReactLinkify>
-        <pre id={"decoded"}>{decoded}</pre>
-      </ReactLinkify>
+        <div className="right">
+          <p className="text-small">Received Data</p>
+          <ReactLinkify
+            componentDecorator={(decoratedHref, decoratedText, key) => (
+              <a target="blank" href={decoratedHref} key={key}>
+                {decoratedText}
+              </a>
+            )}
+          >
+            <pre id={"r"}>{r}</pre>
+          </ReactLinkify>
+          <div className="btn-container">
+            {" "}
+            <input
+              className="inputs"
+              type="text"
+              placeholder="Decryption Code"
+              onChange={(e) => {
+                setdecryptcode(e.target.value);
+              }}
+            />{" "}
+            <span>
+              {" "}
+              <button className="btn" onClick={decryptData}>
+                {"Decrypt Data"}
+              </button>
+            </span>
+          </div>
+          <ReactLinkify>
+            <pre id={"decoded"}>{decoded}</pre>
+          </ReactLinkify>
+        </div>
+      </div>
     </div>
   );
 }
