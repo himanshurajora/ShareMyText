@@ -330,7 +330,7 @@ function App() {
             <button className="btn btn-primary" onClick={shareData}>
               {!disable ? "Share" : "Sending In Progress..."}
             </button>
-            <p className="text-small">{message}</p>
+            {/* <p className="text-small">{message}</p> */}
           </div>
         </div>
 
