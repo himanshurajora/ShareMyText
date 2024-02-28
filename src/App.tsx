@@ -2,7 +2,14 @@ import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import ReactLinkify from "react-linkify";
 import "./App.css";
 import { initializeApp } from "firebase/app";
-import { addDoc, collection, doc, getFirestore, onSnapshot, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getFirestore,
+  onSnapshot,
+  setDoc,
+} from "firebase/firestore";
 import * as Crypto from "crypto-js";
 
 // import hljs, {HLJSApi} from 'highlight.js'
@@ -16,7 +23,40 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
+const themes = [
+  "light",
+  "dark",
+  "cupcake",
+  "bumblebee",
+  "emerald",
+  "corporate",
+  "synthwave",
+  "retro",
+  "cyberpunk",
+  "valentine",
+  "halloween",
+  "garden",
+  "forest",
+  "aqua",
+  "lofi",
+  "pastel",
+  "fantasy",
+  "wireframe",
+  "black",
+  "luxury",
+  "dracula",
+  "cmyk",
+  "autumn",
+  "business",
+  "acid",
+  "lemonade",
+  "night",
+  "coffee",
+  "winter",
+  "dim",
+  "nord",
+  "sunset",
+];
 interface Data {
   data: string;
   createdAt: number;
@@ -24,7 +64,7 @@ interface Data {
 }
 
 function App() {
-  const firestore = getFirestore(app)
+  const firestore = getFirestore(app);
   var db = collection(firestore, "shareData");
   const [data, setData] = useState("");
   const [message, setMessage] = useState("");
@@ -36,12 +76,11 @@ function App() {
   const [downloadUrl, setDownloadUrl] = useState("");
   const [contentType, setContentType] = useState("text/plain");
   const [fileName, setFileName] = useState("demo.txt");
-  const [r, setR] = useState("");
+  const [received, setReceived] = useState("");
   const textInput = useRef<HTMLTextAreaElement>(null);
   const fileInput = useRef<HTMLInputElement>(null);
 
   const shareData = async () => {
-    console.log(fileName);
     setDisable(true);
     if (data) {
       var dataJson: any = {};
@@ -69,8 +108,8 @@ function App() {
 
   const decryptData = async () => {
     try {
-      if (r) {
-        var decoded = Crypto.AES.decrypt(r, decryptcode).toString(
+      if (received) {
+        var decoded = Crypto.AES.decrypt(received, decryptcode).toString(
           Crypto.enc.Utf8
         );
         setdecoded(decoded);
@@ -82,10 +121,9 @@ function App() {
   };
 
   onSnapshot(doc(db, room ? room : "shared"), (snapshot) => {
-    setR(snapshot?.data()?.data);
+    setReceived(snapshot?.data()?.data);
     setFileName(snapshot?.data()?.fileName);
-
-  })
+  });
 
   const handleTextInput = (event: any) => {
     // detect control + enter pressed
@@ -99,7 +137,7 @@ function App() {
     if (decoded) {
       await navigator.clipboard.writeText(decoded);
     } else {
-      await navigator.clipboard.writeText(r);
+      await navigator.clipboard.writeText(received);
     }
   };
 
@@ -107,7 +145,7 @@ function App() {
     if (decoded) {
       setData(decoded);
     } else {
-      setData(r);
+      setData(received);
     }
   };
 
@@ -144,138 +182,207 @@ function App() {
       l.download = "sharemytext.txt";
       l.click();
     } else {
-      l.href = URL.createObjectURL(new Blob([r], { type: "text/plain" }));
+      l.href = URL.createObjectURL(
+        new Blob([received], { type: "text/plain" })
+      );
       l.download = "sharemytext.txt";
       l.click();
     }
   };
 
+  const heading1 = "Share Your Text With Custom Encryption. 🤩 New Look!";
+  const heading2 = "Share Your Text With Custom Encryption. 🤩 New Look!";
 
-  const heading1 = "Share Your Text With Custom Encryption.";
-  const heading2 = "Warning ⚠️ (Everything before 21 Sep. has been removed).";
-
-  const [heading, setHeading] = useState(
-    heading1
-  );
+  const [heading, setHeading] = useState(heading1);
 
   const toggleHeading = () => {
     if (heading === heading1) {
       setHeading(heading2);
-    } if (heading === heading2) { setHeading(heading1) }
-  }
+    }
+    if (heading === heading2) {
+      setHeading(heading1);
+    }
+  };
 
   useEffect(() => {
     setTimeout(() => {
       toggleHeading();
-    }, 5000)
+    }, 5000);
   }, []);
 
+  const currentTheme = localStorage.getItem("theme") || "light";
+
+  useEffect(() => {
+    document.documentElement.setAttribute(
+      "data-theme",
+      localStorage.getItem("theme") || "light"
+    );
+  });
+
   return (
-    <div className="App" onKeyDown={handleTextInput}>
-      <span id="forkongithub">
-        <a href="https://github.com/himanshurajora/ShareMyText/issues" target="_blank">
+    <div
+      className="App w-full p-4 flex flex-col gap-2"
+      onKeyDown={handleTextInput}
+    >
+      <span className="fixed rotate-45 -right-8 top-10 z-10 bg-base-200 p-4">
+        <a
+          href="https://github.com/himanshurajora/ShareMyText/issues"
+          target="_blank"
+        >
           Raise a suggestion 🙋
         </a>
       </span>
-      <h3 id="wrapper">
-        <abbr title='Hi there! ShareMyText is going to have a good future. We are soon going to make some changes regarding data security. If you have any suggestions in your mide, please raise an issues.'>
-        {heading}
-        </abbr>
-        {' '}  Made by <a href="https://github.com/himanshurajora">@himanshurajora</a></h3>
-      <code>
-        <div className="data-section">
-          <input
-            type="file"
-            name=""
-            id=""
-            onChange={handleFileDrop}
-            onDragLeave={handleFileDragOut}
-            ref={fileInput}
-          />
-          <textarea
-            className="input-text"
-            rows={20}
-            ref={textInput}
-            onDragEnter={handleFileDrag}
-            onKeyDown={handleTextInput}
-            onChange={(e) => {
-              setData(e.target.value);
-            }}
-            value={data}
-            placeholder={"Enter You Text Here, Press Ctrl + Enter to share"}
-          ></textarea>
+      <div className="flex flex-row gap-2 items-center">
+        <h3 className="text-xl font-bold inline">
+          <abbr title="Hi there! ShareMyText is going to have a good future. We are soon going to make some changes regarding data security. If you have any suggestions in your mide, please raise an issues.">
+            {heading}
+          </abbr>
+          <b>
+            {" "}
+            Made by{" "}
+            <a href="https://github.com/himanshurajora">@himanshurajora</a>
+          </b>
+        </h3>
+        <select
+          className="select select-bordered inline"
+          onChange={(e) => {
+            const theme = e.target.value;
+            document.documentElement.setAttribute("data-theme", theme);
+            localStorage.setItem("theme", theme);
+          }}
+        >
+          {themes.map((theme) => (
+            <option key={theme} value={theme} selected={theme === currentTheme}>
+              {theme[0].toUpperCase() + theme.slice(1)} theme
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="flex flex-row flex-wrap w-full gap-2">
+        <div className="flex-1">
+          <code>
+            <div className="relative">
+              <input
+                type="file"
+                className="absolute top-0 left-0 w-full h-full opacity-0 -z-20 px-2 py-3"
+                name=""
+                id=""
+                onChange={handleFileDrop}
+                onDragLeave={handleFileDragOut}
+                ref={fileInput}
+              />
+              <textarea
+                className="textarea textarea-bordered w-full"
+                rows={20}
+                ref={textInput}
+                onDragEnter={handleFileDrag}
+                onKeyDown={handleTextInput}
+                onChange={(e) => {
+                  setData(e.target.value);
+                }}
+                value={data}
+                placeholder={"Enter You Text Here, Press Ctrl + Enter to share"}
+              ></textarea>
+              <div
+                className="tooltip tooltip-right absolute left-2 bottom-4"
+                data-tip="Copy output to current textarea"
+              >
+                <button
+                  className="btn btn-ghost border-base-300 border-2"
+                  onClick={copyDecodedToData}
+                >
+                  ⬆️
+                </button>
+              </div>
+              {/* Clear button */}
+              <button
+                className="btn btn-error btn-ghost absolute right-2 bottom-4"
+                onClick={() => {
+                  setData("");
+                  setdecoded("");
+                }}
+              >
+                Clear
+              </button>
+            </div>
+          </code>
+          <div className="flex flex-row gap-2">
+            <input
+              type="text"
+              id="enc"
+              className="input input-bordered"
+              placeholder="Encryption Code (Optional)"
+              onChange={(e) => {
+                setencypcode(e.target.value);
+              }}
+            />{" "}
+            <input
+              id="room"
+              className="input input-bordered"
+              type="text"
+              placeholder="Room Id (Optional)"
+              value={room}
+              onChange={(e) => {
+                setroom(e.target.value);
+                setdecoded("");
+              }}
+            />
+            <button className="btn btn-primary" onClick={shareData}>
+              {!disable ? "Share" : "Sending In Progress..."}
+            </button>
+            <p className="text-small">{message}</p>
+          </div>
         </div>
-      </code>
-      <p>
-        <br />{" "}
-        <input
-          type="text"
-          id="enc"
-          className="inputs"
-          placeholder="Encryption Code (Optional)"
-          onChange={(e) => {
-            setencypcode(e.target.value);
-          }}
-        />{" "}
-        <input
-          id="room"
-          className="inputs"
-          type="text"
-          placeholder="Room Id (Optional)"
-          value={room}
-          onChange={(e) => {
-            setroom(e.target.value);
-            setdecoded("");
-          }}
-        />{" "}
-        <span>
-          {" "}
-          <button className="btn" onClick={shareData}>
-            {!disable ? "Share" : "Sending In Progress..."}
-          </button>
-        </span>
-      </p>
-      <p className="text-small">{message}</p>
-      <button className="btn" onClick={copyOutput}>
-        Copy Output
-      </button>
-      <button className="btn" onClick={copyDecodedToData}>
-        Copy Output To TextArea
-      </button>
-      <button onClick={Download} className="btn" aria-disabled="true">
-        Download
-      </button>
-      <br />
-      <p className="text-small">Recieved data here:</p>
-      <ReactLinkify
-        componentDecorator={(decoratedHref, decoratedText, key) => (
-          <a target="blank" href={decoratedHref} key={key}>
-            {decoratedText}
-          </a>
-        )}
-      >
-        <pre id={"r"}>{r}</pre>
-      </ReactLinkify>
-      <p>
-        {" "}
-        <input
-          className="inputs"
-          type="text"
-          placeholder="Decryption Code"
-          onChange={(e) => {
-            setdecryptcode(e.target.value);
-          }}
-        />{" "}
-        <span>
-          {" "}
-          <button className="btn" onClick={decryptData}>
-            {"Decrypt Data"}
-          </button>
-        </span>
-      </p>
-      <ReactLinkify>
-        <pre id={"decoded"}>{decoded}</pre>
-      </ReactLinkify>
+
+        <div className="flex-1 flex flex-col gap-2">
+          <div className="flex flex-row gap-2">
+            <input
+              className="input input-bordered"
+              type="text"
+              placeholder="Decryption Code"
+              onChange={(e) => {
+                setdecryptcode(e.target.value);
+              }}
+            />
+            <button className="btn btn-warning" onClick={decryptData}>
+              Decrypt Data
+            </button>
+          </div>
+
+          <div className="flex flex-col gap-2 relative">
+            <div className="flex flex-row gap-2 right-0 top-0 absolute p-2">
+              <div className="tooltip" data-tip="Copy to Clipboard">
+                <button
+                  className="btn btn-ghost border-2 border-base-300"
+                  onClick={copyOutput}
+                >
+                  📄
+                </button>
+              </div>
+              <div className="tooltip" data-tip="Download as file">
+                <button
+                  onClick={Download}
+                  className="btn btn-ghost border-2 border-base-300"
+                  aria-disabled="true"
+                >
+                  📥
+                </button>
+              </div>
+            </div>
+            <ReactLinkify
+              componentDecorator={(decoratedHref, decoratedText, key) => (
+                <a target="blank" href={decoratedHref} key={key}>
+                  {decoratedText}
+                </a>
+              )}
+            >
+              <pre className="bg-primary text-base-100 p-3 rounded-md min-h-28">
+                {decoded || received}
+              </pre>
+            </ReactLinkify>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
