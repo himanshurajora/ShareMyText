@@ -80,6 +80,13 @@ function App() {
   const textInput = useRef<HTMLTextAreaElement>(null);
   const fileInput = useRef<HTMLInputElement>(null);
 
+  // share data on input
+  useEffect(() => {
+    if (data) {
+      shareData();
+    }
+  }, [data]);
+
   const shareData = async () => {
     setDisable(true);
     if (data) {
@@ -96,7 +103,9 @@ function App() {
         };
       }
 
-      await setDoc(doc(db, room ? room : "shared"), dataJson);
+      await setDoc(doc(db, room ? room : "shared"), dataJson).finally(() => {
+        setDisable(false);
+      });
       setMessage(
         `shared data successfully at ${new Date(
           dataJson.createdAt
@@ -258,8 +267,8 @@ function App() {
           ))}
         </select>
       </div>
-      <div className="flex flex-row flex-wrap w-full gap-2">
-        <div className="flex-1">
+      <div className="flex flex-row flex-wrap w-full gap-2 min-w-[300px]">
+        <div className="flex-1 min-w-[300px]">
           <code>
             <div className="relative">
               <input
@@ -272,8 +281,7 @@ function App() {
                 ref={fileInput}
               />
               <textarea
-                className="textarea textarea-bordered w-full"
-                rows={20}
+                className="textarea textarea-bordered w-full h-[75vh]"
                 ref={textInput}
                 onDragEnter={handleFileDrag}
                 onKeyDown={handleTextInput}
@@ -306,7 +314,7 @@ function App() {
               </button>
             </div>
           </code>
-          <div className="flex flex-row gap-2">
+          <div className="flex flex-wrap flex-row gap-2">
             <input
               type="text"
               id="enc"
@@ -318,9 +326,9 @@ function App() {
             />{" "}
             <input
               id="room"
-              className="input input-bordered"
+              className="input input-bordered placeholder-red-500"
               type="text"
-              placeholder="Room Id (Optional)"
+              placeholder="Room Id (Required)*"
               value={room}
               onChange={(e) => {
                 setroom(e.target.value);
@@ -328,7 +336,7 @@ function App() {
               }}
             />
             <button className="btn btn-primary" onClick={shareData}>
-              {!disable ? "Share" : "Sending In Progress..."}
+              {!disable ? "Share (Ctrl + Enter)" : "Sending In Progress..."}
             </button>
             {/* <p className="text-small">{message}</p> */}
           </div>
