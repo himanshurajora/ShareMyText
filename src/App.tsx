@@ -229,168 +229,174 @@ function App() {
   });
 
   return (
-    <div
-      className="App w-full p-4 flex flex-col gap-2"
-      onKeyDown={handleTextInput}
-    >
-      <span className="fixed rotate-45 -right-8 top-10 z-10 bg-base-200 p-4">
-        <a
-          href="https://github.com/himanshurajora/ShareMyText/issues"
-          target="_blank"
-        >
-          Raise a suggestion 🙋
-        </a>
-      </span>
-      <div className="flex flex-row gap-2 items-center">
-        <h3 className="text-xl font-bold inline">
-          <abbr title="Hi there! ShareMyText is going to have a good future. We are soon going to make some changes regarding data security. If you have any suggestions in your mide, please raise an issues.">
-            {heading}
-          </abbr>
-          <b>
-            {" "}
-            Made by{" "}
-            <a href="https://github.com/himanshurajora">@himanshurajora</a>
-          </b>
-        </h3>
-        <select
-          className="select select-bordered inline"
-          onChange={(e) => {
-            const theme = e.target.value;
-            document.documentElement.setAttribute("data-theme", theme);
-            localStorage.setItem("theme", theme);
-          }}
-        >
-          {themes.map((theme) => (
-            <option key={theme} value={theme} selected={theme === currentTheme}>
-              {theme[0].toUpperCase() + theme.slice(1)} theme
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="flex flex-row flex-wrap w-full gap-2 min-w-[300px]">
-        <div className="flex-1 min-w-[300px]">
-          <code>
-            <div className="relative">
-              <input
-                type="file"
-                className="absolute top-0 left-0 w-full h-full opacity-0 -z-20 px-2 py-3"
-                name=""
-                id=""
-                onChange={handleFileDrop}
-                onDragLeave={handleFileDragOut}
-                ref={fileInput}
-              />
-              <textarea
-                className="textarea textarea-bordered w-full h-[75vh]"
-                ref={textInput}
-                onDragEnter={handleFileDrag}
-                onKeyDown={handleTextInput}
-                onChange={(e) => {
-                  setData(e.target.value);
-                }}
-                value={data}
-                placeholder={"Enter You Text Here, Press Ctrl + Enter to share"}
-              ></textarea>
-              <div
-                className="tooltip tooltip-right absolute left-2 bottom-4"
-                data-tip="Copy output to current textarea"
-              >
-                <button
-                  className="btn btn-ghost border-base-300 border-2"
-                  onClick={copyDecodedToData}
-                >
-                  ⬆️
-                </button>
-              </div>
-              {/* Clear button */}
-              <button
-                className="btn btn-error btn-ghost absolute right-2 bottom-4"
-                onClick={() => {
-                  setData("");
-                  setdecoded("");
-                }}
-              >
-                Clear
-              </button>
-            </div>
-          </code>
-          <div className="flex flex-wrap flex-row gap-2">
-            <input
-              type="text"
-              id="enc"
-              className="input input-bordered"
-              placeholder="Encryption Code (Optional)"
-              onChange={(e) => {
-                setencypcode(e.target.value);
-              }}
-            />{" "}
-            <input
-              id="room"
-              className="input input-bordered placeholder-red-500"
-              type="text"
-              placeholder="Room Id (Required)*"
-              value={room}
-              onChange={(e) => {
-                setroom(e.target.value);
-                setdecoded("");
-              }}
-            />
-            <button className="btn btn-primary" onClick={shareData}>
-              {!disable ? "Share (Ctrl + Enter)" : "Sending In Progress..."}
-            </button>
-            {/* <p className="text-small">{message}</p> */}
-          </div>
+    <div className="min-h-screen bg-base-100">
+      {/* Navigation Bar */}
+      <nav className="navbar bg-base-200 px-4 shadow-lg sticky top-0 z-50">
+        <div className="flex-1">
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            ShareMyText
+          </h1>
         </div>
+        <div className="flex-none gap-4">
+          <select
+            className="select select-bordered select-sm"
+            onChange={(e) => {
+              const theme = e.target.value;
+              document.documentElement.setAttribute("data-theme", theme);
+              localStorage.setItem("theme", theme);
+            }}
+          >
+            {themes.map((theme) => (
+              <option key={theme} value={theme} selected={theme === currentTheme}>
+                {theme[0].toUpperCase() + theme.slice(1)}
+              </option>
+            ))}
+          </select>
+          <a
+            href="https://github.com/himanshurajora/ShareMyText/issues"
+            target="_blank"
+            className="btn btn-ghost btn-sm"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+            </svg>
+            Suggest
+          </a>
+        </div>
+      </nav>
 
-        <div className="flex-1 flex flex-col gap-2">
-          <div className="flex flex-row gap-2">
-            <input
-              className="input input-bordered"
-              type="text"
-              placeholder="Decryption Code"
-              onChange={(e) => {
-                setdecryptcode(e.target.value);
-              }}
-            />
-            <button className="btn btn-warning" onClick={decryptData}>
-              Decrypt Data
-            </button>
-          </div>
-
-          <div className="flex flex-col gap-2 relative">
-            <div className="flex flex-row gap-2 right-0 top-0 absolute p-2">
-              <div className="tooltip" data-tip="Copy to Clipboard">
-                <button
-                  className="btn btn-ghost border-2 border-base-300"
-                  onClick={copyOutput}
-                >
-                  📄
-                </button>
+      <main className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Input Section */}
+          <div className="card bg-base-200 shadow-xl">
+            <div className="card-body p-4">
+              <h2 className="card-title mb-4">Share Text</h2>
+              <div className="relative">
+                <input
+                  type="file"
+                  className="absolute top-0 left-0 w-full h-full opacity-0 -z-20"
+                  onChange={handleFileDrop}
+                  onDragLeave={handleFileDragOut}
+                  ref={fileInput}
+                />
+                <textarea
+                  className="textarea textarea-bordered w-full h-[50vh] font-mono text-sm"
+                  ref={textInput}
+                  onDragEnter={handleFileDrag}
+                  onKeyDown={handleTextInput}
+                  onChange={(e) => setData(e.target.value)}
+                  value={data}
+                  placeholder="Enter your text here. Press Ctrl + Enter to share"
+                ></textarea>
+                
+                <div className="absolute bottom-4 right-4 flex gap-2">
+                  <button
+                    className="btn btn-circle btn-ghost btn-sm tooltip"
+                    data-tip="Copy output to input"
+                    onClick={copyDecodedToData}
+                  >
+                    ⬆️
+                  </button>
+                  <button
+                    className="btn btn-circle btn-ghost btn-sm tooltip"
+                    data-tip="Clear"
+                    onClick={() => {
+                      setData("");
+                      setdecoded("");
+                    }}
+                  >
+                    ❌
+                  </button>
+                </div>
               </div>
-              <div className="tooltip" data-tip="Download as file">
-                <button
-                  onClick={Download}
-                  className="btn btn-ghost border-2 border-base-300"
-                  aria-disabled="true"
+
+              <div className="flex flex-wrap gap-4 mt-4">
+                <input
+                  type="text"
+                  className="input input-bordered input-sm flex-1"
+                  placeholder="Encryption Code (Optional)"
+                  onChange={(e) => setencypcode(e.target.value)}
+                />
+                <input
+                  className="input input-bordered input-sm flex-1"
+                  type="text"
+                  placeholder="Room ID (Required)*"
+                  value={room}
+                  onChange={(e) => {
+                    setroom(e.target.value);
+                    setdecoded("");
+                  }}
+                />
+                <button 
+                  className={`btn btn-primary btn-sm ${disable ? 'loading' : ''}`}
+                  onClick={shareData}
+                  disabled={disable}
                 >
-                  📥
+                  {!disable ? "Share" : "Sending..."}
                 </button>
               </div>
             </div>
-            <ReactLinkify
-              componentDecorator={(decoratedHref, decoratedText, key) => (
-                <a target="blank" href={decoratedHref} key={key}>
-                  {decoratedText}
-                </a>
-              )}
-            >
-              <pre className="bg-primary text-base-100 p-3 rounded-md min-h-28">
-                {decoded || received}
-              </pre>
-            </ReactLinkify>
+          </div>
+
+          {/* Output Section */}
+          <div className="card bg-base-200 shadow-xl">
+            <div className="card-body p-4">
+              <h2 className="card-title mb-4">Received Text</h2>
+              <div className="flex gap-4 mb-4">
+                <input
+                  className="input input-bordered input-sm flex-1"
+                  type="text"
+                  placeholder="Decryption Code"
+                  onChange={(e) => setdecryptcode(e.target.value)}
+                />
+                <button 
+                  className="btn btn-warning btn-sm"
+                  onClick={decryptData}
+                >
+                  Decrypt
+                </button>
+              </div>
+
+              <div className="relative">
+                <div className="absolute top-2 right-2 flex gap-2">
+                  <button
+                    className="btn btn-circle btn-ghost btn-sm tooltip"
+                    data-tip="Copy to Clipboard"
+                    onClick={copyOutput}
+                  >
+                    📄
+                  </button>
+                  <button
+                    className="btn btn-circle btn-ghost btn-sm tooltip"
+                    data-tip="Download"
+                    onClick={Download}
+                  >
+                    📥
+                  </button>
+                </div>
+                <ReactLinkify
+                  componentDecorator={(decoratedHref, decoratedText, key) => (
+                    <a target="blank" href={decoratedHref} key={key} className="text-primary hover:underline">
+                      {decoratedText}
+                    </a>
+                  )}
+                >
+                  <pre className="bg-base-300 p-4 rounded-lg min-h-[50vh] font-mono text-sm whitespace-pre-wrap">
+                    {decoded || received}
+                  </pre>
+                </ReactLinkify>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="footer footer-center p-4 bg-base-200 text-base-content">
+        <div>
+          <p>Made with ❤️ by <a href="https://github.com/himanshurajora" className="text-primary hover:underline">@himanshurajora</a></p>
+        </div>
+      </footer>
     </div>
   );
 }
