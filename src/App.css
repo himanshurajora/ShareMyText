@@ -1,0 +1,52 @@
+/* Smooth transitions for theme changes */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--base-200);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-focus);
+}
+
+/* Smooth textarea resize */
+textarea {
+  resize: vertical;
+  transition: height 0.3s ease;
+}
+
+/* File drag overlay */
+.file-drag-active {
+  border: 2px dashed var(--primary);
+  background: var(--base-300);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.card {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Better focus states */
+input:focus, textarea:focus, select:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
