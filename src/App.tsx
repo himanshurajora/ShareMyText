@@ -253,6 +253,16 @@ function App() {
             ))}
           </select>
           <a
+            href="https://buymeacoffee.com/himanshurajora"
+            target="_blank"
+            className="btn btn-warning btn-sm"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="mr-2">
+              <path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4v-2z"/>
+            </svg>
+            Buy me a coffee
+          </a>
+          <a
             href="https://github.com/himanshurajora/ShareMyText/issues"
             target="_blank"
             className="btn btn-ghost btn-sm"
@@ -392,9 +402,18 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="footer footer-center p-4 bg-base-200 text-base-content">
-        <div>
-          <p>Made with ❤️ by <a href="https://github.com/himanshurajora" className="text-primary hover:underline">@himanshurajora</a></p>
+      <footer className="footer footer-center p-4 bg-base-200 text-base-content mt-auto">
+        <div className="flex flex-col items-center gap-2">
+          <p className="flex items-center gap-2">
+            Made with ❤️ by{" "}
+            <a 
+              href="https://github.com/himanshurajora" 
+              className="text-primary hover:underline"
+            >
+              @himanshurajora
+            </a>
+          </p>
+         
         </div>
       </footer>
     </div>

@@ -50,3 +50,17 @@ input:focus, textarea:focus, select:focus {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
+
+/* Footer positioning */
+.min-h-screen {
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+.footer {
+  margin-top: auto;
+}
