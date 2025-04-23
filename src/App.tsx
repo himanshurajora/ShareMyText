@@ -1,31 +1,13 @@
-import React, { useState, useEffect, useRef, ChangeEvent } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
 import { initializeApp, FirebaseApp } from "firebase/app";
 import {
-  addDoc,
   collection,
   doc,
   getFirestore,
   onSnapshot,
   setDoc,
-  query,
-  orderBy,
-  limit,
 } from "firebase/firestore";
-import {
-  getStorage,
-  ref,
-  uploadBytes,
-  getDownloadURL,
-} from "firebase/storage";
-import * as Crypto from "crypto-js";
-import {
-  encryptData,
-  decryptData,
-  generateKeyPair,
-  exportPublicKey,
-  importPublicKey,
-} from "./crypto";
 
 // Components
 import Header from "./components/Header";
@@ -62,32 +44,13 @@ try {
 
 function App() {
   const firestore = getFirestore(app);
-  var db = collection(firestore, "shareData");
+  const db = collection(firestore, "shareData");
   const [data, setData] = useState("");
-  const [message, setMessage] = useState("");
-  const [disable, setDisable] = useState(false);
-  const [encypcode, setencypcode] = useState("");
-  const [decryptcode, setdecryptcode] = useState("");
   const [decoded, setdecoded] = useState("");
-  const [room, setroom] = useState("");
-  const [downloadUrl, setDownloadUrl] = useState("");
-  const [contentType, setContentType] = useState("text/plain");
   const [fileName, setFileName] = useState("demo.txt");
   const [received, setReceived] = useState("");
   const [toast, setToast] = useState({ show: false, message: "", type: "" });
   const fileInput = useRef<HTMLInputElement>(null);
-
-  // Get current theme from localStorage with fallback to system preference
-  const [currentTheme, setCurrentTheme] = useState(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme) return savedTheme;
-    
-    // Check system preference
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      return 'dark';
-    }
-    return 'light';
-  });
 
   // Display toast notification
   const showToast = (message: string, type: string = "success") => {
@@ -96,37 +59,6 @@ function App() {
       setToast({ show: false, message: "", type: "" });
     }, 3000);
   };
-
-  // Handle theme change with persistence
-  const handleThemeChange = (theme: string) => {
-    setCurrentTheme(theme);
-    localStorage.setItem("theme", theme);
-    document.documentElement.setAttribute("data-theme", theme);
-    
-    // Add transition class
-    document.documentElement.classList.add('theme-transition');
-    setTimeout(() => {
-      document.documentElement.classList.remove('theme-transition');
-    }, 300);
-  };
-
-  // Listen for system theme changes
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = (e: MediaQueryListEvent) => {
-      if (!localStorage.getItem("theme")) {
-        handleThemeChange(e.matches ? 'dark' : 'light');
-      }
-    };
-
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
-
-  // Set initial theme
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", currentTheme);
-  }, []);
 
   // share data on input
   useEffect(() => {
@@ -137,13 +69,13 @@ function App() {
 
   // Listen for room data changes
   useEffect(() => {
-    const unsubscribe = onSnapshot(doc(db, room ? room : "shared"), (snapshot) => {
+    const unsubscribe = onSnapshot(doc(db, "shared"), (snapshot) => {
       setReceived(snapshot?.data()?.data);
       setFileName(snapshot?.data()?.fileName);
     });
 
     return () => unsubscribe();
-  }, [room, db]);
+  }, [db]);
 
   const shareData = async () => {
     if (!data.trim()) {
@@ -151,26 +83,16 @@ function App() {
       return;
     }
 
-    setDisable(true);
     try {
       const dataJson = {
-        data: encypcode 
-          ? Crypto.AES.encrypt(data, encypcode).toString()
-          : data,
+        data,
         createdAt: Date.now(),
         fileName: fileName || "sharemytext.txt"
       };
 
-      await setDoc(doc(db, room || "shared"), dataJson);
+      await setDoc(doc(db, "shared"), dataJson);
       
-      const successMessage = encypcode 
-        ? "Text encrypted and shared successfully!"
-        : "Text shared successfully!";
-      
-      showToast(successMessage, "success");
-      setMessage(
-        `Shared data successfully at ${new Date(dataJson.createdAt).toUTCString()}`
-      );
+      showToast("Text shared successfully!", "success");
     } catch (error) {
       console.error("Error sharing data:", error);
       showToast(
@@ -179,27 +101,17 @@ function App() {
           : "Error sharing text. Please try again.",
         "error"
       );
-    } finally {
-      setDisable(false);
     }
   };
 
   const handleDecryptData = async () => {
-    if (!received || !decryptcode) {
-      showToast("No text to decrypt or missing decryption key", "error");
+    if (!received) {
+      showToast("No text to decrypt", "error");
       return;
     }
 
     try {
-      const decoded = Crypto.AES.decrypt(received, decryptcode).toString(
-        Crypto.enc.Utf8
-      );
-      
-      if (!decoded) {
-        throw new Error("Decryption resulted in empty text");
-      }
-      
-      setdecoded(decoded);
+      setdecoded(received);
       showToast("Text decrypted successfully!", "success");
     } catch (error) {
       console.error("Decryption error:", error);
@@ -239,7 +151,7 @@ function App() {
     }
   };
 
-  const handleFileDrop = async (e: ChangeEvent<HTMLInputElement>) => {
+  const handleFileDrop = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) {
       showToast("No file selected", "error");
@@ -253,7 +165,6 @@ function App() {
 
     const reader = new FileReader();
     setFileName(file.name);
-    setContentType(file.type);
 
     reader.onloadend = () => {
       if (fileInput.current) {
@@ -314,8 +225,11 @@ function App() {
 
       {/* Header */}
       <Header 
-        currentTheme={currentTheme} 
-        onThemeChange={handleThemeChange} 
+        currentTheme={localStorage.getItem("theme") || "light"}
+        onThemeChange={(theme) => {
+          document.documentElement.setAttribute("data-theme", theme);
+          localStorage.setItem("theme", theme);
+        }}
       />
 
       <main className="container mx-auto px-4 py-6 sm:py-10 flex-grow z-10">
@@ -334,8 +248,8 @@ function App() {
           <TextOutput 
             received={received}
             decoded={decoded}
-            decryptCode={decryptcode}
-            onDecryptCodeChange={setdecryptcode}
+            decryptCode=""
+            onDecryptCodeChange={() => {}}
             onDecryptClick={handleDecryptData}
             onCopyClick={copyOutput}
             onDownloadClick={handleDownload}
