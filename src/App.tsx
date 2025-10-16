@@ -405,13 +405,7 @@ function App() {
       <footer className="footer footer-center p-4 bg-base-200 text-base-content mt-auto">
         <div className="flex flex-col items-center gap-2">
           <p className="flex items-center gap-2">
-            Made with ❤️ by{" "}
-            <a 
-              href="https://github.com/himanshurajora" 
-              className="text-primary hover:underline"
-            >
-              @himanshurajora
-            </a>
+            made with love love love emojies by siru19
           </p>
          
         </div>
