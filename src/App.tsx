@@ -77,6 +77,7 @@ function App() {
   const [contentType, setContentType] = useState("text/plain");
   const [fileName, setFileName] = useState("demo.txt");
   const [received, setReceived] = useState("");
+  const [outputCopied, setOutputCopied] = useState(false);
   const textInput = useRef<HTMLTextAreaElement>(null);
   const fileInput = useRef<HTMLInputElement>(null);
 
@@ -141,12 +142,17 @@ function App() {
     }
   };
 
-  const copyOutput = async () => {
-    // copy decoded if exists otherwise the recieved text to clipboard
-    if (decoded) {
-      await navigator.clipboard.writeText(decoded);
-    } else {
-      await navigator.clipboard.writeText(received);
+  const copyOutput = async (): Promise<void> => {
+    try {
+      if (decoded) {
+        await navigator.clipboard.writeText(decoded);
+      } else {
+        await navigator.clipboard.writeText(received);
+      }
+      setOutputCopied(true);
+      window.setTimeout(() => setOutputCopied(false), 2000);
+    } catch {
+      setOutputCopied(false);
     }
   };
 
@@ -374,7 +380,13 @@ function App() {
                     data-tip="Copy to Clipboard"
                     onClick={copyOutput}
                   >
-                    📄
+                    {outputCopied ? (
+                      <span className="text-success text-lg font-bold leading-none">
+                        {"\u2713"}
+                      </span>
+                    ) : (
+                      "📄"
+                    )}
                   </button>
                   <button
                     className="btn btn-circle btn-ghost btn-sm tooltip"
